@@ -1,0 +1,23 @@
+{
+  "name": "smt-server",
+  "version": "0.0.1",
+  "author": "Jacob Waller <jacob@seemytree.se>",
+  "description": "The SMT API",
+  "contributors": [ 
+    {
+      "name": "David Waller",
+      "email": "david@seemytree.se"
+    } 
+  ],
+  "dependencies" : {
+    "mongoose"   :  "2.5.x",
+    "connect" :  "2.0.x"
+  },
+
+  "devDependencies": {
+    "mocha": "0.14.x"
+  },
+  "engine": {
+    "node": ">=0.6"
+  }
+}
