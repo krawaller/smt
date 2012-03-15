@@ -11,7 +11,9 @@
   ],
   "dependencies" : {
     "mongoose"   :  "2.5.x",
-    "connect" :  "2.0.x"
+    "express": "2.5.x",
+    "connect" :  "2.0.x",
+    "express-mongoose": "0.0.5"
   },
 
   "devDependencies": {
