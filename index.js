@@ -8,24 +8,7 @@ var express = require('express'),
 mongoose.connect('mongodb://smt:yv38uY7XkY@staff.mongohq.com:10027/smt-dev');
 
 // Models
-var Tree = new mongoose.Schema({
-    title: {
-        type: String,
-        index: true
-    },
-    date: Date
-});
-mongoose.model('Tree', Tree);
-
-
 var NorthPartnerOrganisation = new mongoose.Schema({
-    // objectId: mongoose.Schema.ObjectId,
-    // name: {
-    //     type: String,
-    //     index: {
-    //         unique: false
-    //     }
-    // },
     name: String,
     email: String,
     phone: String,
@@ -33,11 +16,20 @@ var NorthPartnerOrganisation = new mongoose.Schema({
 });
 mongoose.model('NorthPartnerOrganisation', NorthPartnerOrganisation);
 
+var SouthPartnerOrganisation = new mongoose.Schema({
+    name: String,
+    email: String,
+    phone: String,
+    date: Date
+});
+mongoose.model('SouthPartnerOrganisation', SouthPartnerOrganisation);
+
 // Server
 var app = express.createServer();
 app.use(express.bodyParser());
 app.use(express.cookieParser());
 app.use(express.session({ secret: 'secret' }));
+// app.use(express.session({ secret: 'secret' }));
 
 // CORS FTW
 app.all('/api/*', function(req, res, next) {
@@ -53,12 +45,21 @@ app.get('/', function(req, res){
     res.send('Hello world!');
 });
 
-app.get('/api/northpartnerorganisation', function(req, res){
-    res.send(mongoose.model('NorthPartnerOrganisation').find());
-});
 
-app.get('/api/northpartnerorganisation/:name', function(req, res){
-    res.send(mongoose.model('NorthPartnerOrganisation').find({ name: req.params.name }));
+// Make sure that the model exists before we procedd
+app.all('/api/:model/:q?', function(req, res, next){
+    if(req.params.model){
+        var model;
+        try {
+            model = mongoose.model(req.params.model);
+        } catch(e){}
+
+        if(model){
+            next();
+        } else {
+            res.send({ success: false, message: 'Model ' + req.params.model + ' not found' });
+        }
+    }
 });
 
 
@@ -71,32 +72,13 @@ function onResponse(err){
     }
 }
 
-app.post('/api/northpartnerorganisation', function(req, res){
-
-    // console.log('saving', req.body);
-    delete req.body._id;
-    var northPartnerOrganisation = new (mongoose.model('NorthPartnerOrganisation'))(req.body);
-    northPartnerOrganisation.save(onResponse.bind(res));
-    
-});
-
-app.put('/api/northpartnerorganisation/:id', function(req, res){
-
-    var id = req.body._id;
-    delete req.body._id;
-
-    mongoose.model('NorthPartnerOrganisation').update({ _id: id }, req.body, onResponse.bind(res));
-});
-
 function deleteOnFind(err, doc){
     var me = this;
     if(err || !doc){
         this.send({ success: false });
     } else {
-        // doc.remove(onResponse.bind(this));
         doc.remove(function(err) {
             if (err) {
-                console.log('err', err);
                 me.send({ success: false });
             } else {
                 me.send({ success: true, id: doc._id });
@@ -104,12 +86,35 @@ function deleteOnFind(err, doc){
         });
     }
 }
-app.delete('/api/northpartnerorganisation/:id', function(req, res){
-
-    var id = req.body._id;
-    mongoose.model('NorthPartnerOrganisation').findById(id, deleteOnFind.bind(res));
-    
+app.get('/api/:model', function(req, res){
+    res.send(mongoose.model(req.params.model).find());
 });
 
+app.get('/api/:model/:name', function(req, res){
+    res.send(mongoose.model(req.params.model).find({ name: req.params.name }));
+});
+
+app.post('/api/:model', function(req, res){
+    delete req.body._id;
+
+    var model = mongoose.model(req.params.model);
+    var instance = new model(req.body);
+    instance.save(onResponse.bind(res));
+});
+
+app.put('/api/:model/:id', function(req, res){
+    var model = mongoose.model(req.params.model);
+    var id = req.body._id;
+    delete req.body._id;
+
+    model.update({ _id: id }, req.body, onResponse.bind(res));
+});
+
+app.delete('/api/:model/:id', function(req, res){
+    var model = mongoose.model(req.params.model);
+    var id = req.body._id;
+
+    model.findById(id, deleteOnFind.bind(res));
+});
 
 app.listen(process.env.PORT || 3000);
