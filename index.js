@@ -24,12 +24,12 @@ var SouthPartnerOrganisation = new mongoose.Schema({
 });
 mongoose.model('SouthPartnerOrganisation', SouthPartnerOrganisation);
 
+
 // Server
 var app = express.createServer();
 app.use(express.bodyParser());
 app.use(express.cookieParser());
 app.use(express.session({ secret: 'secret' }));
-// app.use(express.session({ secret: 'secret' }));
 
 // CORS FTW
 app.all('/api/*', function(req, res, next) {
@@ -44,7 +44,6 @@ app.all('/api/*', function(req, res, next) {
 app.get('/', function(req, res){
     res.send('Hello world!');
 });
-
 
 // Make sure that the model exists before we procedd
 app.all('/api/:model/:q?', function(req, res, next){
@@ -75,11 +74,11 @@ function onResponse(err){
 function deleteOnFind(err, doc){
     var me = this;
     if(err || !doc){
-        this.send({ success: false });
+        this.send({ success: false, id: doc._id });
     } else {
         doc.remove(function(err) {
             if (err) {
-                me.send({ success: false });
+                me.send({ success: false, id: doc._id });
             } else {
                 me.send({ success: true, id: doc._id });
             }
