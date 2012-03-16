@@ -1,3 +1,5 @@
+//TODO: create a README.md with a simple summary of techniques, structure and philosophy
+
 var express = require('express'),
     http = require('http'),
     mongoose = require('mongoose'),
@@ -41,6 +43,7 @@ app.use(express.session({ secret: 'secret' }));
 app.all('/api/*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
     next();
 });
 
@@ -59,7 +62,7 @@ app.get('/api/northpartnerorganisation/:name', function(req, res){
 });
 
 
-function onSave(err){
+function onResponse(err){
     if (err) {
         console.log('err', err);
         this.send({ success: false });
@@ -67,24 +70,46 @@ function onSave(err){
         this.send({ success: true });
     }
 }
+
 app.post('/api/northpartnerorganisation', function(req, res){
 
-    // console.log('before manip', req.body);
+    // console.log('saving', req.body);
+    delete req.body._id;
+    var northPartnerOrganisation = new (mongoose.model('NorthPartnerOrganisation'))(req.body);
+    northPartnerOrganisation.save(onResponse.bind(res));
+    
+});
+
+app.put('/api/northpartnerorganisation/:id', function(req, res){
 
     var id = req.body._id;
     delete req.body._id;
-    delete req.body.id;
 
-    //FIXME this should be fixed on the client so a request with an existing id uses PUT
-    if(id){
-        console.log('updating', id, req.body);
-        mongoose.model('NorthPartnerOrganisation').update({ _id: id }, req.body, onSave.bind(res));
-    } else {
-        console.log('saving', req.body);
-        var northPartnerOrganisation = new (mongoose.model('NorthPartnerOrganisation'))(req.body);
-        northPartnerOrganisation.save(onSave.bind(res));
-    }
-
+    mongoose.model('NorthPartnerOrganisation').update({ _id: id }, req.body, onResponse.bind(res));
 });
+
+function deleteOnFind(err, doc){
+    var me = this;
+    if(err || !doc){
+        this.send({ success: false });
+    } else {
+        // doc.remove(onResponse.bind(this));
+        doc.remove(function(err) {
+            if (err) {
+                console.log('err', err);
+                me.send({ success: false });
+            } else {
+                me.send({ success: true, id: doc._id });
+            }
+        });
+    }
+}
+app.delete('/api/northpartnerorganisation/:id', function(req, res){
+
+    var id = req.body._id;
+    mongoose.model('NorthPartnerOrganisation').findById(id, deleteOnFind.bind(res));
+    
+});
+
 
 app.listen(3000);
