@@ -1,5 +1,5 @@
 {
-  "name": "smt-server",
+  "name": "smt",
   "version": "0.0.1",
   "author": "Jacob Waller <jacob@seemytree.se>",
   "description": "The SMT API",
@@ -19,7 +19,8 @@
   "devDependencies": {
     "mocha": "0.14.x"
   },
-  "engine": {
-    "node": ">=0.6"
+  "engines": {
+    "node": "0.6.x",
+    "npm":  "1.x.x"
   }
 }
