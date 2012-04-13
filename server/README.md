@@ -11,7 +11,9 @@ The NPM modules used are ExpressJS, MongooseJS and Express-Mongoose. Express pro
 Running
 -------
 
-You can run the server locally if you wish, though it will still point to the MongoHQ Database instance. If you run it locally, it will fire up on port 3000. If you append `?debug=true` when loading the app in the browser, it will connect to http://localhost:3000 instead of http://smt-dev.herokuapp.com
+You can run the server locally if you wish, though it will still point to the MongoHQ Database instance. If you run it locally, it will fire up on port 3000. If you append `?localAPI=true` when loading the app in the browser, it will make all API calls to http://localhost:3000 instead of http://smt-dev.herokuapp.com. Also, which MongoDB server is used is specified using the NODE_ENV variable. If it is set to development, the server tries to connect to your local MongoDB server.
+
+From above, you'll see that to run the server locally with the server pointing to a local database and the app using the local API, you start the server with the command `NODE_ENV=development node server/index.js` and then go to `http://localhost:3000/?localAPI` in your browser, and everything will work without an internet connection.
 
 Deploy
 ------

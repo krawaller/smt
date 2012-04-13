@@ -1,5 +1,5 @@
 var Config = {
-    API: window.location.search.indexOf('debug') === -1 ? 'http://smt-dev.herokuapp.com/api/' : 'http://localhost:3000/api/'
+    API: window.location.search.indexOf('localAPI') === -1 ? 'http://smt-dev.herokuapp.com/api/' : 'http://localhost:3000/api/'
 };
 
 Ext.Loader.setConfig({
