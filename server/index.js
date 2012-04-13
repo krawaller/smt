@@ -5,7 +5,8 @@ var express = require('express'),
     mongoose = require('mongoose'),
     expressMongoose = require('express-mongoose');
 
-mongoose.connect('mongodb://smt:yv38uY7XkY@staff.mongohq.com:10027/smt-dev');
+// mongoose.connect('mongodb://smt:yv38uY7XkY@staff.mongohq.com:10027/smt-dev');
+mongoose.connect('mongodb://localhost/smt-dev');
 
 // Models
 var NorthPartnerOrganisation = new mongoose.Schema({
@@ -30,6 +31,7 @@ var app = express.createServer();
 app.use(express.bodyParser());
 app.use(express.cookieParser());
 app.use(express.session({ secret: 'secret' }));
+app.use(express.static(__dirname + '/../app'));
 
 // CORS FTW
 app.all('/api/*', function(req, res, next) {
