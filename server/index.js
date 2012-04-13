@@ -5,8 +5,11 @@ var express = require('express'),
     mongoose = require('mongoose'),
     expressMongoose = require('express-mongoose');
 
-// mongoose.connect('mongodb://smt:yv38uY7XkY@staff.mongohq.com:10027/smt-dev');
-mongoose.connect('mongodb://localhost/smt-dev');
+if(process.env.NODE_ENV === 'development'){
+    mongoose.connect('mongodb://localhost/smt-dev');
+} else {
+    mongoose.connect('mongodb://smt:yv38uY7XkY@staff.mongohq.com:10027/smt-dev');
+}
 
 // Models
 var NorthPartnerOrganisation = new mongoose.Schema({
