@@ -1,4 +1,7 @@
-define(['src/libs/jquery/jquery-min'], function(){
-	// might import some jQuery modules here later! :)
-	return $.noConflict();
+/*
+Simply sets up the jquery object, loading all the need plugins
+*/
+define(['order!src/libs/jquery/jquery-min',
+		'order!src/libs/jquery/jquery-cookie'], function(){
+	return $;
 });

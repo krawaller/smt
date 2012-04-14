@@ -2,8 +2,10 @@ define(['order!src/libs/underscore/underscore','order!src/libs/jquery/jquery','o
 function(_,$,Backbone,Router) {
 	return {
 		initialize: function(){
-			var router =  new Router({});
-			Backbone.history.start()
+			var router =  new Router({
+				$el: $("#wrapper")
+			});
+			Backbone.history.start({pushState: false});
 		}
 	};
 });
