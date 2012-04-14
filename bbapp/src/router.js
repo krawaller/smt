@@ -10,7 +10,7 @@ define(['order!src/libs/jquery/jquery',
 			"main": "#main",
 		},
 		initialize: function(opts) {
-			console.log("initializing router");
+
 		},
 		index: function() { this.publishView("main",new mainView); }
 	});

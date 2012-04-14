@@ -3,7 +3,6 @@ function(_,$,Backbone,Router) {
 	return {
 		initialize: function(){
 			var router =  new Router({});
-			console.log("ROUTER",typeof router,router);
 			Backbone.history.start()
 		}
 	};

@@ -5,10 +5,6 @@ function(Backbone,_,$){
 			this.template = _.template("<p>Halloj halloj hej!!</p>");
 		},
 		render: function(){
-			console.log("WTF=!=!=!=!",$);
-			for(var p in $){
-				console.log(p,$[p]);
-			}
 			$(this.el).html(this.template());
 		}
 	});
