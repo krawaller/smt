@@ -2,17 +2,24 @@ define(['order!src/libs/jquery/jquery',
 		'order!src/libs/underscore/underscore',
 		'order!src/libs/backbone/backbone',
 		'text!src/views/tmpl/main.html',
+		'src/models/session',
 		'src/views/front',
 		'src/views/nav',
 		'src/views/login',
 		'src/views/user',
-		'src/models/session'
-		], function($,_,Backbone,mainTemplate,FrontView,NavView,LoginView,UserView,Session) {
+		'src/views/shop',
+		'src/views/myorders',
+		'src/views/makepayments'
+		], function($,_,Backbone,mainTemplate,Session,FrontView,NavView,LoginView,UserView,ShopView,MyOrdersView,MakePaymentsView) {
 	return Backbone.Router.extend({
 		routes: {
 			"":"index",
 			"index":"index",
-			"login": "login"
+			"front": "index",
+			"login": "login",
+			"shop": "shop",
+			"myorders": "myorders",
+			"makepayments": "makepayments"
 		},
 		viewContainers: {
 			"main": "#main",
@@ -24,7 +31,18 @@ define(['order!src/libs/jquery/jquery',
 			loggedout: function(){ this.navigate("index",{trigger:true}); },
 			navto: function(e){ this.navigate(e.destination,{trigger:true}); }
 		},
+		authorize: function(view){ // called by publishView, return false if not ok
+			if (view.okroles){
+				if (!this.session.hasroles(view.okroles)){
+					this.navigate("index",{trigger:true});
+					Backbone.trigger("message",{kind:"warn",msg:"You hacker you!"});
+					return false;
+				}
+			}
+			return true;
+		},
 		initialize: function(opts) {
+			_.bindAll(this,"authorize");
 			opts.$el.html(mainTemplate);
 			var session = new Session;
 			this.session = session;
@@ -37,8 +55,17 @@ define(['order!src/libs/jquery/jquery',
 			}
 		},
 		index: function() { this.publishView("main",new FrontView); },
-		login: function(){ // TODO - redirect if already chosen
+		login: function(){
 			this.publishView("main",new LoginView({session:this.session}));
+		},
+		shop: function(){
+			this.publishView("main",new ShopView({session:this.session}));
+		},
+		myorders: function(){
+			this.publishView("main",new MyOrdersView({session:this.session}));
+		},
+		makepayments: function(){
+			this.publishView("main",new MakePaymentsView({session:this.session}));
 		}
 	});
 });

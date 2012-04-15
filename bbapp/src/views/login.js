@@ -8,6 +8,7 @@ define(['src/libs/backbone/backbone',
 		'text!src/views/tmpl/login.html'],
 function(Backbone,_,$,tmpl){
 	return Backbone.View.extend({
+		okroles: ["ANONYMOUS"],
 		initialize: function(opts){
 			this.template = _.template(tmpl);
 			this.session = opts.session;

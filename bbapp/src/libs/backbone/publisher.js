@@ -17,6 +17,9 @@ define(["src/libs/jquery/jquery"],function($){
 					view = containername;
 					containername = "main";
 				}
+				if (this.authorize && !this.authorize(view)){
+					return;
+				};
 				cur = this.viewContainers[containername];
 				if (cur.view){
 					cur.view.close();
