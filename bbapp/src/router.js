@@ -10,8 +10,9 @@ define(['order!src/libs/jquery/jquery',
 		'src/views/user',
 		'src/views/shop',
 		'src/views/myorders',
-		'src/views/makepayments'
-		], function($,_,Backbone,mainTemplate,Session,FrontView,NavView,MsgView,LoginView,UserView,ShopView,MyOrdersView,MakePaymentsView) {
+		'src/views/makepayments',
+		'src/views/changelog'
+		], function($,_,Backbone,mainTemplate,Session,FrontView,NavView,MsgView,LoginView,UserView,ShopView,MyOrdersView,MakePaymentsView,ChangeLogView) {
 	return Backbone.Router.extend({
 		routes: {
 			"":"index",
@@ -20,7 +21,8 @@ define(['order!src/libs/jquery/jquery',
 			"login": "login",
 			"shop": "shop",
 			"myorders": "myorders",
-			"makepayments": "makepayments"
+			"makepayments": "makepayments",
+			"changelog": "changelog"
 		},
 		viewContainers: {
 			"main": "#main",
@@ -70,6 +72,10 @@ define(['order!src/libs/jquery/jquery',
 		},
 		makepayments: function(){
 			this.publishView("main",new MakePaymentsView({session:this.session}));
+		},
+		changelog: function(){
+			console.log("Publishing unc changelog!")
+			this.publishView("main",new ChangeLogView({session:this.session}));
 		}
 	});
 });

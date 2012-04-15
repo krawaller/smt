@@ -18,7 +18,6 @@ function(Backbone,_,$){
 			var msg = $("<li class='"+o.kind+"'>"+o.msg+"</li>"),
 				me = this;
 			this.$el.append(msg);
-			console.log("ADDED MSG",o.msg)
 			setTimeout(function(){
 				msg.remove();
 			},2000)

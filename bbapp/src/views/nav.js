@@ -22,7 +22,8 @@ function(Backbone,_,$){
 				"login": "ANONYMOUS",
 				"shop": "customer",
 				"myorders": "customer",
-				"makepayments": "admin"
+				"makepayments": "admin",
+				"changelog": "ALL"
 			};
 			this.$el.empty();
 			for(var link in links){
