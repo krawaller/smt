@@ -5,12 +5,13 @@ define(['order!src/libs/jquery/jquery',
 		'src/models/session',
 		'src/views/front',
 		'src/views/nav',
+		'src/views/msg',
 		'src/views/login',
 		'src/views/user',
 		'src/views/shop',
 		'src/views/myorders',
 		'src/views/makepayments'
-		], function($,_,Backbone,mainTemplate,Session,FrontView,NavView,LoginView,UserView,ShopView,MyOrdersView,MakePaymentsView) {
+		], function($,_,Backbone,mainTemplate,Session,FrontView,NavView,MsgView,LoginView,UserView,ShopView,MyOrdersView,MakePaymentsView) {
 	return Backbone.Router.extend({
 		routes: {
 			"":"index",
@@ -24,7 +25,8 @@ define(['order!src/libs/jquery/jquery',
 		viewContainers: {
 			"main": "#main",
 			"nav": "#nav",
-			"user": "#user"
+			"user": "#user",
+			"msg": "#msg"
 		},
 		globalEvents: {
 			loggedin: function(){ this.navigate("index",{trigger:true}); },
@@ -35,7 +37,7 @@ define(['order!src/libs/jquery/jquery',
 			if (view.okroles){
 				if (!this.session.hasroles(view.okroles)){
 					this.navigate("index",{trigger:true});
-					Backbone.trigger("message",{kind:"warn",msg:"You hacker you!"});
+					Backbone.trigger("notify",{kind:"fail",msg:"You hacker you!"});
 					return false;
 				}
 			}
@@ -46,9 +48,11 @@ define(['order!src/libs/jquery/jquery',
 			opts.$el.html(mainTemplate);
 			var session = new Session;
 			this.session = session;
+			// set up the interface parts
 			this.navView = new NavView({session:session});
 			this.publishView("nav",this.navView);
 			this.publishView("user",new UserView({session:session}));
+			this.publishView("msg",new MsgView);
 			// global events from backbone object
 			for(var evt in this.globalEvents){
 				Backbone.on(evt,this.globalEvents[evt],this);

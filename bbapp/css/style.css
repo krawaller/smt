@@ -23,6 +23,18 @@ h1 {
 	background-color: #CC0;
 }
 
+#msg {
+	float: right;
+}
+
+#msg .ok {
+	background-color: green;
+}
+
+#msg .fail {
+	background-color: red;
+}
+
 h2 {
 	padding-top: 1em;
 	font-weight: bold;

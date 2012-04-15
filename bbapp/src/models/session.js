@@ -19,6 +19,7 @@ function(Backbone,_,$){
 		logout: function(){
 			delete this.user;
 			Backbone.trigger("loggedout");
+			Backbone.trigger("notify",{msg:"Logged out!",kind:"ok"});
 		},
 		hasroles: function(roles){
 			for(var i=0;i<roles.length;i++){

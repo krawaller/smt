@@ -25,8 +25,17 @@ function(Backbone,_,$,tmpl){
 			this.$(".loader").show();
 			var me = this;
 			setTimeout(function(){
-				console.log("name",me.$("#who").val());
-				me.session.login({name:me.$("#who").val()});
+				var name = me.$("#who").val(),
+					pwd = me.$("#pwd").val();
+				me.$(".loader").hide();
+				console.log("LOGIN",name,pwd);
+				if (pwd === "123"){
+					me.session.login({name:name});
+					Backbone.trigger("notify",{kind:"ok",msg:"Login successful!"});
+				} else {
+					me.$("#pwd").val('');
+					Backbone.trigger("notify",{kind:"fail",msg:"Login failed!"});
+				}
 			},1000);
 		}
 	});
